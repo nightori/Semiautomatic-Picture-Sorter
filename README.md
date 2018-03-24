@@ -7,8 +7,8 @@ You can use it to sort the files of any type, but the preview won't be available
 ### How to use it
 1. You specify the path to the files;
 2. A picture appears!
-3. You select the corresponding folder from the folder list.
-4. If there are more pictures, go to 2
+3. You select the corresponding folder from the folder list;
+4. If there are more pictures, go to 2;
 5. You're done!
 
 Please note that you have to fill out the `Folders.txt` before launching the program.
