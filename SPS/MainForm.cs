@@ -110,5 +110,11 @@ namespace SPS
             listBox.ClearSelected();
             nextPicture();
         }
+
+        private void listBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char ENTER_KEY = Convert.ToChar(Keys.Return);
+            if (e.KeyChar == ENTER_KEY) listBox_Click(sender, e);
+        }
     }
 }

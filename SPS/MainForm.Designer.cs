@@ -102,6 +102,7 @@
             this.listBox.Size = new System.Drawing.Size(256, 340);
             this.listBox.TabIndex = 6;
             this.listBox.Click += new System.EventHandler(this.listBox_Click);
+            this.listBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listBox_KeyPress);
             // 
             // MainForm
             // 
