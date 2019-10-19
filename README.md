@@ -13,4 +13,4 @@ You can use it to sort the files of any type, but the preview won't be available
 
 Please note that you have to fill out the `Folders.txt` before launching the program.
 
-![SPS Screenshot](https://i.yapx.ru/BH7zy.png)
+![SPS Screenshot](https://user-images.githubusercontent.com/36256313/67137805-b808ac80-f25c-11e9-8331-e00dd0f81bc8.png)
