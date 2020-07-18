@@ -6,8 +6,8 @@ using System.Text;
 using Microsoft.VisualBasic.FileIO;
 
 /*
-	Dedicated to Alicia-chan
-	Initial release: March 21, 2018
+    Dedicated to Alicia-chan
+    Initial release: March 21, 2018
     Updated and improved: July 18, 2020
 */
 
