@@ -19,7 +19,6 @@ namespace SPS
 
         private string FOLDERS_FILENAME = "Folders.txt";
         private string FOLDERS_CUTENAME = "Папки.txt";
-        private string STR_FILENAME = "Filename: ";
         private string STR_FILE = "File ";
         private string STR_OUT_OF = " out of ";
         private string STR_EMPTY_FOLDER_LIST = "Please fill out the folder list before launching the program.";
@@ -76,9 +75,11 @@ namespace SPS
             displayDialog();
         }
 
-        // interface tweaks on initial form showing
+        // initial form showing events
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            Activate();
+
             // if the secret cute mode was triggered
             if (cuteMode) setCuteStyle();
         }
@@ -161,7 +162,7 @@ namespace SPS
             {
                 filename = filename.Substring(0, MAX_LENGTH) + "...";
             }
-            fileNameLbl.Text = STR_FILENAME + filename;
+            fileNameLbl.Text = filename;
             fileIndexLbl.Text = STR_FILE + (currentFile + 1) + STR_OUT_OF + files.Length;
 
             try
@@ -241,7 +242,6 @@ namespace SPS
         // set the text constants to cute mode
         private void setCuteStrings()
         {
-            STR_FILENAME = "Имя файла: ";
             STR_FILE = "Файл ";
             STR_OUT_OF = " из ";
             STR_EMPTY_FOLDER_LIST = "Сначала заполни файл со списком папкок ^^";
@@ -267,6 +267,5 @@ namespace SPS
             deleteBtn.Text = "Удалить";
             skipBtn.Text = "Пропустить";
         }
-
     }
 }
