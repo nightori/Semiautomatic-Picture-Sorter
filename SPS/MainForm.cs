@@ -16,15 +16,12 @@ namespace SPS
     public partial class MainForm : Form
     {
         private const int MAX_LENGTH = 45;
-        private const int FULL_HEIGHT = 500;
-        private const int DEF_HEIGHT = 70;
 
         private string FOLDERS_FILENAME = "Folders.txt";
         private string FOLDERS_CUTENAME = "Папки.txt";
         private string STR_FILENAME = "Filename: ";
         private string STR_FILE = "File ";
         private string STR_OUT_OF = " out of ";
-        private string STR_RESET = "Reset";
         private string STR_EMPTY_FOLDER_LIST = "Please fill out the folder list before launching the program.";
         private string STR_ERROR = "Error!";
         private string STR_EMPTY_FOLDER = "The specified folder is empty!";
@@ -67,40 +64,33 @@ namespace SPS
             // if the file is empty or doesn't exist
             if (empty)
             {
-                MessageBox.Show(STR_EMPTY_FOLDER_LIST, STR_ERROR);
+                MessageBox.Show(new Form() { TopMost = true }, STR_EMPTY_FOLDER_LIST, STR_ERROR);
                 System.Diagnostics.Process.Start(FOLDERS_FILENAME);
-                Environment.Exit(1);
+                Environment.Exit(0);
                 return;
             }
 
             // if everything is fine
             listBox.Items.Clear();
             listBox.Items.AddRange(folderNames);
+            displayDialog();
         }
 
         // interface tweaks on initial form showing
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            // hide the main part of the window until everything's initialized
-            ActiveForm.Height = DEF_HEIGHT;
-
             // if the secret cute mode was triggered
-            if (cuteMode)
-            {
-                setCuteStyle();
-            }
+            if (cuteMode) setCuteStyle();
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Restart();
         }
 
         // select and open the directory with files
-        private void browseBtn_Click(object sender, EventArgs e)
+        private void displayDialog()
         {
-            // reset everything if the sorting is going
-            if (isInitialized)
-            {
-                Application.Restart();
-                return;
-            }
-
             FolderBrowserDialog FBD = new FolderBrowserDialog();
             if (FBD.ShowDialog() == DialogResult.OK)
             {
@@ -108,42 +98,44 @@ namespace SPS
                 files = new DirectoryInfo(FBD.SelectedPath).GetFiles();
                 if (files.Length == 0)
                 {
-                    MessageBox.Show(STR_EMPTY_FOLDER, STR_ERROR);
+                    MessageBox.Show(new Form() { TopMost = true }, STR_EMPTY_FOLDER, STR_ERROR);
+                    System.Diagnostics.Process.Start(Application.ExecutablePath);
+                    Environment.Exit(0);
                     return;
                 }
                 else
                 {
-                    folderPathTbox.Text = FBD.SelectedPath;
-                    InitiateSorting();
+                    InitiateSorting(FBD.SelectedPath);
                 }
+            }
+            else
+            {
+                Environment.Exit(0);
             }
         }
         
         // initialize everything before sorting
-        private void InitiateSorting()
+        private void InitiateSorting(string path)
         {            
             // create all the necessary folders
             folderInfos = new DirectoryInfo[folderNames.Length];
             for (int i = 0; i<folderNames.Length; i++)
             {
-                string folderPath = folderPathTbox.Text + '\\'+folderNames[i];
+                string folderPath = path + '\\'+folderNames[i];
                 try
                 {
                     folderInfos[i] = Directory.CreateDirectory(folderPath);
                 }
                 catch
                 {
-                    MessageBox.Show(STR_INIT_ERROR, STR_ERROR);
-                    Application.Restart();
+                    MessageBox.Show(new Form() { TopMost = true }, STR_INIT_ERROR, STR_ERROR);
+                    System.Diagnostics.Process.Start(Application.ExecutablePath);
+                    Environment.Exit(0);
                     return;
                 }
             }
 
-            // switch "Browse" to "Reset"
-            browseBtn.Text = STR_RESET;
-
-            // show the rest of the window and load the first file
-            ActiveForm.Height = FULL_HEIGHT;
+            // load the first file
             isInitialized = true;
             loadNextPicture();
         }
@@ -153,12 +145,11 @@ namespace SPS
         {
             if (!isInitialized) return;
 
-
             // if all files have been processed
             if (++currentFile >= files.Length)
             {
-                MessageBox.Show(STR_ALL_SORTED, STR_DONE);
-                Application.Restart();
+                MessageBox.Show(new Form() { TopMost = true }, STR_ALL_SORTED, STR_DONE);
+                Close();
                 return;
             }
 
@@ -187,7 +178,7 @@ namespace SPS
                 pictureBox.Image = new Bitmap(Properties.Resources.picture_error);
             }
             listBox.ClearSelected();
-            this.ActiveControl = listBox;
+            ActiveControl = listBox;
         }
 
         // move the selected file to the selected folder
@@ -253,7 +244,6 @@ namespace SPS
             STR_FILENAME = "Имя файла: ";
             STR_FILE = "Файл ";
             STR_OUT_OF = " из ";
-            STR_RESET = "Сброс";
             STR_EMPTY_FOLDER_LIST = "Сначала заполни файл со списком папкок ^^";
             STR_ERROR = "Ошибка :c";
             STR_EMPTY_FOLDER = "В заданной папке ничего нет!";
@@ -267,18 +257,16 @@ namespace SPS
         {
             // change the color scheme
             ActiveForm.BackColor = Color.FromArgb(255, 230, 245);
-            browseBtn.BackColor = Color.White;
             openBtn.BackColor = Color.White;
             deleteBtn.BackColor = Color.White;
             skipBtn.BackColor = Color.White;
 
             // change the form text
             ActiveForm.Text = "Сортировщик картиночек (и всего остального) ^^";
-            folderPathTbox.Text = "Путь к папке с файлами...";
-            browseBtn.Text = "Выбрать";
             openBtn.Text = "Открыть";
             deleteBtn.Text = "Удалить";
             skipBtn.Text = "Пропустить";
         }
+
     }
 }
